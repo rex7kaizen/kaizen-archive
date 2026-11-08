@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: Build debug APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -36,6 +36,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.13'
+          cache-provider: basic
 
       - name: Run unit tests and assemble APK
         run: gradle --no-daemon clean testDebugUnitTest assembleDebug
