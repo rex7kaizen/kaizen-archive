@@ -1,6 +1,7 @@
 package com.kaizen.archive.notification
 
 import android.app.Notification
+import androidx.core.app.NotificationCompat
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.kaizen.archive.KaizenArchiveApp
@@ -49,7 +50,7 @@ class WhatsAppNotificationListener : NotificationListenerService() {
 
         val notification = sbn.notification ?: return
         val extras = notification.extras ?: return
-        val style = Notification.MessagingStyle.extractMessagingStyleFromNotification(notification)
+        val style = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification)
         val fallbackTitle = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
         val chatTitle = style?.conversationTitle?.toString()
             ?.takeIf { it.isNotBlank() }
@@ -59,7 +60,9 @@ class WhatsAppNotificationListener : NotificationListenerService() {
         val incoming = style?.messages.orEmpty().mapNotNull { message ->
             val body = message.text?.toString()?.trim().orEmpty()
             if (body.isBlank()) null else Triple(
-                message.sender?.toString()?.takeIf { it.isNotBlank() } ?: fallbackTitle ?: chatTitle,
+                message.person?.name?.toString()?.takeIf { it.isNotBlank() }
+                    ?: fallbackTitle?.takeIf { it.isNotBlank() }
+                    ?: chatTitle,
                 body,
                 message.timestamp,
             )

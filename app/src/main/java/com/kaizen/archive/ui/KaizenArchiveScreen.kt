@@ -171,9 +171,11 @@ fun KaizenArchiveScreen(viewModel: ArchiveViewModel = viewModel()) {
                     onDeleteChat = { confirmAction = "chat:${selectedChat.id}" },
                 )
                 selectedChatId != null -> {
-                    EmptyState("Sohbet bulunamadı", "Bu sohbet silinmiş veya taşınmış olabilir.") {
-                        selectedChatId = null
-                    }
+                    EmptyState(
+                        title = "Sohbet bulunamadı",
+                        body = "Bu sohbet silinmiş veya taşınmış olabilir.",
+                        action = { selectedChatId = null },
+                    )
                 }
                 tab == MainTab.CHATS -> ChatsScreen(
                     chats = chats,
